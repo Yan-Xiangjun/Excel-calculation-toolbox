@@ -4,9 +4,9 @@
 用于帮助用户撰写工程结构计算书的ExcelVSTO插件
 
 #### 软件架构
-使用VB.NET编写VSTO主程序
-使用VBA编写自定义函数
-使用Python编写量纲计算系统，打包为exe文件，由VB.NET通过WScript调用
+使用VB.NET编写VSTO主程序  
+使用VBA编写自定义函数  
+使用Python编写量纲计算系统，打包为exe文件，由VB.NET通过WScript调用  
 
 
 #### 安装教程
