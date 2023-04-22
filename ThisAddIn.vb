@@ -59,12 +59,15 @@ Public Class ThisAddIn
                 Dim cell_left = Target.Offset(0, -1)
                 If Globals.Ribbons.Ribbon1.Chk2.Checked And Globals.Ribbons.Ribbon1.Chk3.Checked Then
                     cell_left.Formula = "=smart_formula(" & ar & ",0)"
+                    Target.EntireColumn.AutoFit()
                     cell_left.EntireColumn.AutoFit()
                 ElseIf Globals.Ribbons.Ribbon1.Chk2.Checked And Not Globals.Ribbons.Ribbon1.Chk3.Checked Then
                     cell_left.Formula = "=smart_formula(" & ar & ",1)"
+                    Target.EntireColumn.AutoFit()
                     cell_left.EntireColumn.AutoFit()
                 ElseIf Not Globals.Ribbons.Ribbon1.Chk2.Checked And Globals.Ribbons.Ribbon1.Chk3.Checked Then
                     cell_left.Formula = "=smart_formula(" & ar & ",2)"
+                    Target.EntireColumn.AutoFit()
                     cell_left.EntireColumn.AutoFit()
                 Else
                 End If
