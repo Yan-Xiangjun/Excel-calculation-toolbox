@@ -30,11 +30,10 @@ Public Class ThisAddIn
 
     Private Sub Application_SheetChange(Sh As Object, Target As Range) Handles Application.SheetChange
         xls.EnableEvents = False
-        xls.ScreenUpdating = False
 
         If Target.Cells.Count = 1 Then
             If Target.Interior.Color = 15132390 And Target.Formula <> "" Then
-
+                xls.ScreenUpdating = False
                 'ROUND
                 Dim cell_formu_now = Target.Formula
                 Dim d = Globals.Ribbons.Ribbon1.DropDown1.SelectedItem.Label
@@ -98,10 +97,10 @@ Public Class ThisAddIn
                     xls.ActiveWorkbook.Names.Add(n_unit, "=" & a_unit)
                 End If
 
-
+                xls.ScreenUpdating = True
             End If
         End If
-        xls.ScreenUpdating = True
+
         xls.EnableEvents = True
     End Sub
 
