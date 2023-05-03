@@ -30,6 +30,7 @@ Public Class ThisAddIn
 
     Private Sub Application_SheetChange(Sh As Object, Target As Range) Handles Application.SheetChange
         xls.EnableEvents = False
+        xls.ScreenUpdating = False
 
         If Target.Cells.Count = 1 Then
             If Target.Interior.Color = 15132390 And Target.Formula <> "" Then
@@ -100,6 +101,7 @@ Public Class ThisAddIn
 
             End If
         End If
+        xls.ScreenUpdating = True
         xls.EnableEvents = True
     End Sub
 
@@ -173,6 +175,7 @@ Public Class ThisAddIn
         Next
 
         xls.EnableEvents = False
+        xls.ScreenUpdating = False
         Dim u_sheet = xls.ActiveWorkbook.Sheets.Add(After:=xls.ActiveWorkbook.Worksheets(ct))
         u_sheet.Name = "【settings】"
         u_sheet.Visible = 0
@@ -183,6 +186,7 @@ Public Class ThisAddIn
             Wb.Sheets("【settings】").Cells(1, i + 2).Value = superscripts(i)
         Next
 
+        xls.ScreenUpdating = True
         xls.EnableEvents = True
     End Sub
 

@@ -107,7 +107,7 @@ Public Class Ribbon1
     '发送到Word
     Private Sub Button3_Click(sender As Object, e As RibbonControlEventArgs) Handles Button3.Click
         Dim doc = CreateObject("Word.Application")
-        doc.Visible = True
+
         Dim wd = doc.documents.Add
         Dim s As String
         Dim ct As Integer
@@ -142,7 +142,7 @@ Public Class Ribbon1
                         Call formu_edit(doc, wd, "pro")
 
                     End If
-                    Else '该行没有名字以“_unit”结尾的单元格
+                Else '该行没有名字以“_unit”结尾的单元格
                     For Each c In r.Cells
                         s = c.Text
                         If s <> "" Then doc.Selection.TypeText(s)
@@ -161,6 +161,7 @@ Public Class Ribbon1
             End If
 
         Next
+        doc.Visible = True
         MsgBox("完成！", vbInformation)
     End Sub
     Function has_smart_cell(rng As Excel.Range)
