@@ -11,6 +11,7 @@
 'WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 'See the License for the specific language governing permissions and
 'limitations under the License.
+Imports System.Diagnostics
 Imports Microsoft.Office.Interop.Excel
 
 Public Class ThisAddIn
@@ -18,7 +19,6 @@ Public Class ThisAddIn
     Private Sub ThisAddIn_Startup() Handles Me.Startup
         Globals.Ribbons.Ribbon1.DropDown1.SelectedItemIndex = 2
         superscripts = {"²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"}
-        ws = CreateObject("WScript.Shell")
         py_location = Environment.GetEnvironmentVariable("Excel_calculation_toolbox", 2)
         my_function_xlam = xls.Workbooks.Open(py_location & "my_function.xlam")
 
@@ -34,70 +34,74 @@ Public Class ThisAddIn
         If Target.Cells.Count = 1 Then
             If Target.Interior.Color = 15132390 And Target.Formula <> "" Then
                 xls.ScreenUpdating = False
-                'ROUND
-                Dim cell_formu_now = Target.Formula
-                Dim d = Globals.Ribbons.Ribbon1.DropDown1.SelectedItem.Label
-                If Globals.Ribbons.Ribbon1.Chk4.Checked Then
-                    If Left(cell_formu_now, 1) = "=" Then
-                        If Left(cell_formu_now, 7) <> "=ROUND(" Then
-                            Target.Formula = "=ROUND(" & Mid(cell_formu_now, 2) & ", " & d & ")"
-                        Else
-                            Target.Formula = Left(cell_formu_now, InStrRev(cell_formu_now, ",") - 1) & ", " & d & ")"
+                Try
+                    'ROUND
+                    Dim cell_formu_now = Target.Formula
+                    Dim d = Globals.Ribbons.Ribbon1.DropDown1.SelectedItem.Label
+                    If Globals.Ribbons.Ribbon1.Chk4.Checked Then
+                        If Left(cell_formu_now, 1) = "=" Then
+                            If Left(cell_formu_now, 7) <> "=ROUND(" Then
+                                Target.Formula = "=ROUND(" & Mid(cell_formu_now, 2) & ", " & d & ")"
+                            Else
+                                Target.Formula = Left(cell_formu_now, InStrRev(cell_formu_now, ",") - 1) & ", " & d & ")"
+                            End If
+                        End If
+                    Else
+                        If Left(cell_formu_now, 1) = "=" And Left(cell_formu_now, 7) = "=ROUND(" Then
+                            Dim temp = Mid(cell_formu_now, 8)
+                            Target.Formula = "=" & Left(temp, InStrRev(temp, ",") - 1)
                         End If
                     End If
-                Else
-                    If Left(cell_formu_now, 1) = "=" And Left(cell_formu_now, 7) = "=ROUND(" Then
-                        Dim temp = Mid(cell_formu_now, 8)
-                        Target.Formula = "=" & Left(temp, InStrRev(temp, ",") - 1)
+
+                    Dim ar = Target.Address(RowAbsolute:=False, ColumnAbsolute:=False)
+
+
+                    '显示公式
+                    Dim cell_left = Target.Offset(0, -1)
+                    If Globals.Ribbons.Ribbon1.Chk2.Checked And Globals.Ribbons.Ribbon1.Chk3.Checked Then
+                        cell_left.Formula = "=smart_formula(" & ar & ",0)"
+                        Target.EntireColumn.AutoFit()
+                        cell_left.EntireColumn.AutoFit()
+                    ElseIf Globals.Ribbons.Ribbon1.Chk2.Checked And Not Globals.Ribbons.Ribbon1.Chk3.Checked Then
+                        cell_left.Formula = "=smart_formula(" & ar & ",1)"
+                        Target.EntireColumn.AutoFit()
+                        cell_left.EntireColumn.AutoFit()
+                    ElseIf Not Globals.Ribbons.Ribbon1.Chk2.Checked And Globals.Ribbons.Ribbon1.Chk3.Checked Then
+                        cell_left.Formula = "=smart_formula(" & ar & ",2)"
+                        Target.EntireColumn.AutoFit()
+                        cell_left.EntireColumn.AutoFit()
+                    Else
                     End If
-                End If
 
-                Dim ar = Target.Address(RowAbsolute:=False, ColumnAbsolute:=False)
+                    '命名单元格
+                    Dim cell_left2 = Target.Offset(0, -2)
+                    Dim n = cell_left2.Value
+                    Dim a = Target.Address
+                    Dim re = CreateObject("VBScript.RegExp") : re.Pattern = "[a-zA-Z]+(?=[0-9])"
+                    Dim matches = re.Execute(n)
+                    If matches.Count <> 0 Then
+                        cell_left2.Value = Left(n, matches(0).Length) & "_" & Mid(n, matches(0).Length + 1)
+                        n = cell_left2.Value
+                    End If
+                    If Globals.Ribbons.Ribbon1.Chk1.Checked And n IsNot Nothing Then
+                        Try
+                            xls.ActiveWorkbook.Names.Add(n, "=" & a)
+                        Catch e As Exception
+                            MsgBox(n & "所在单元格命名失败！" & vbCr & e.Message, vbExclamation)
+                        End Try
+                    End If
+                    '量纲计算
+                    If Globals.Ribbons.Ribbon1.Chk5.Checked Then
+                        Target.Offset(0, 1).Formula = unit_cal(xls.Range(ar))
+                        Dim n_unit = n & "_unit"
+                        Dim a_unit = Target.Offset(0, 1).Address
+                        xls.ActiveWorkbook.Names.Add(n_unit, "=" & a_unit)
+                    End If
 
-
-                '显示公式
-                Dim cell_left = Target.Offset(0, -1)
-                If Globals.Ribbons.Ribbon1.Chk2.Checked And Globals.Ribbons.Ribbon1.Chk3.Checked Then
-                    cell_left.Formula = "=smart_formula(" & ar & ",0)"
-                    Target.EntireColumn.AutoFit()
-                    cell_left.EntireColumn.AutoFit()
-                ElseIf Globals.Ribbons.Ribbon1.Chk2.Checked And Not Globals.Ribbons.Ribbon1.Chk3.Checked Then
-                    cell_left.Formula = "=smart_formula(" & ar & ",1)"
-                    Target.EntireColumn.AutoFit()
-                    cell_left.EntireColumn.AutoFit()
-                ElseIf Not Globals.Ribbons.Ribbon1.Chk2.Checked And Globals.Ribbons.Ribbon1.Chk3.Checked Then
-                    cell_left.Formula = "=smart_formula(" & ar & ",2)"
-                    Target.EntireColumn.AutoFit()
-                    cell_left.EntireColumn.AutoFit()
-                Else
-                End If
-
-                '命名单元格
-                Dim cell_left2 = Target.Offset(0, -2)
-                Dim n = cell_left2.Value
-                Dim a = Target.Address
-                Dim re = CreateObject("VBScript.RegExp") : re.Pattern = "[a-zA-Z]+(?=[0-9])"
-                Dim matches = re.Execute(n)
-                If matches.Count <> 0 Then
-                    cell_left2.Value = Left(n, matches(0).Length) & "_" & Mid(n, matches(0).Length + 1)
-                    n = cell_left2.Value
-                End If
-                If Globals.Ribbons.Ribbon1.Chk1.Checked And n IsNot Nothing Then
-                    Try
-                        xls.ActiveWorkbook.Names.Add(n, "=" & a)
-                    Catch e As Exception
-                        MsgBox(n & "所在单元格命名失败！" & vbCr & e.Message, vbExclamation)
-                    End Try
-                End If
-                '量纲计算
-                If Globals.Ribbons.Ribbon1.Chk5.Checked Then
-                    Target.Offset(0, 1).Formula = unit_cal(xls.Range(ar))
-                    Dim n_unit = n & "_unit"
-                    Dim a_unit = Target.Offset(0, 1).Address
-                    xls.ActiveWorkbook.Names.Add(n_unit, "=" & a_unit)
-                End If
-
-                xls.ScreenUpdating = True
+                    xls.ScreenUpdating = True
+                Catch e1 As Exception
+                    xls.ScreenUpdating = True
+                End Try
             End If
         End If
 
@@ -157,8 +161,16 @@ Public Class ThisAddIn
         Next
 
         var_f = Mid(var_f, 2)
-        Dim ws_out = ws.Exec("""" & py_location & "\py_unit_cal.exe""" & " """ & var_f & """").StdOut
-        unit_cal = ws_out.ReadLine
+
+        Dim py_process = New Process()
+        py_process.StartInfo.UseShellExecute = False
+        py_process.StartInfo.RedirectStandardOutput = True
+        py_process.StartInfo.FileName = py_location & "\py_unit_cal.exe"
+        py_process.StartInfo.CreateNoWindow = True
+        py_process.StartInfo.Arguments = var_f
+        py_process.Start()
+        unit_cal = Replace(py_process.StandardOutput.ReadToEnd(), vbCrLf, "")
+
 
         For i = 2 To 9
             unit_cal = Replace(unit_cal, "^" & CStr(i), superscripts(i - 2))
