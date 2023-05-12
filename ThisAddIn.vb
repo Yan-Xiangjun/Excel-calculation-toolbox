@@ -20,7 +20,10 @@ Public Class ThisAddIn
         Globals.Ribbons.Ribbon1.DropDown1.SelectedItemIndex = 2
         superscripts = {"²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"}
         py_location = Environment.GetEnvironmentVariable("Excel_calculation_toolbox", 2)
-        my_function_xlam = xls.Workbooks.Open(py_location & "my_function.xlam")
+        Dim wb = xls.Workbooks.Add()
+        xls.AddIns.Add(py_location & "my_function.xlam")
+        xls.AddIns("My_Function").Installed = True
+        wb.Close(False)
 
     End Sub
 
@@ -59,15 +62,15 @@ Public Class ThisAddIn
                     '显示公式
                     Dim cell_left = Target.Offset(0, -1)
                     If Globals.Ribbons.Ribbon1.Chk2.Checked And Globals.Ribbons.Ribbon1.Chk3.Checked Then
-                        cell_left.Formula = "=smart_formula(" & ar & ",0)"
+                        cell_left.Formula = "=smart_formula(" & ar & ",""² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹""" & ",0)"
                         Target.EntireColumn.AutoFit()
                         cell_left.EntireColumn.AutoFit()
                     ElseIf Globals.Ribbons.Ribbon1.Chk2.Checked And Not Globals.Ribbons.Ribbon1.Chk3.Checked Then
-                        cell_left.Formula = "=smart_formula(" & ar & ",1)"
+                        cell_left.Formula = "=smart_formula(" & ar & ",""² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹""" & ",1)"
                         Target.EntireColumn.AutoFit()
                         cell_left.EntireColumn.AutoFit()
                     ElseIf Not Globals.Ribbons.Ribbon1.Chk2.Checked And Globals.Ribbons.Ribbon1.Chk3.Checked Then
-                        cell_left.Formula = "=smart_formula(" & ar & ",2)"
+                        cell_left.Formula = "=smart_formula(" & ar & ",""² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹""" & ",2)"
                         Target.EntireColumn.AutoFit()
                         cell_left.EntireColumn.AutoFit()
                     Else
@@ -143,7 +146,7 @@ Public Class ThisAddIn
 
             End If
         Next
-        Dim supported_funcs = Split(xls.ActiveWorkbook.Sheets("【settings】").Cells(1, 1).Text, vbLf)
+        Dim supported_funcs = Split(My.Computer.FileSystem.ReadAllText(py_location & "config.txt"), vbCrLf)
 
         For Each func_ In supported_funcs
             re.Pattern = "[+\-*/^(,=]" & func_ & "(?=[+\-*/^(,])"
@@ -165,7 +168,7 @@ Public Class ThisAddIn
         Dim py_process = New Process()
         py_process.StartInfo.UseShellExecute = False
         py_process.StartInfo.RedirectStandardOutput = True
-        py_process.StartInfo.FileName = py_location & "\py_unit_cal.exe"
+        py_process.StartInfo.FileName = py_location & "py_unit_cal.exe"
         py_process.StartInfo.CreateNoWindow = True
         py_process.StartInfo.Arguments = var_f
         py_process.Start()
@@ -178,27 +181,5 @@ Public Class ThisAddIn
         If unit_cal = "1" Then unit_cal = "~"
     End Function
 
-
-    Private Sub Application_WorkbookActivate(Wb As Workbook) Handles Application.WorkbookActivate
-        Dim ct = xls.ActiveWorkbook.Worksheets.Count
-        For Each sh In Wb.Worksheets
-            If sh.Name = "【settings】" Then Exit Sub
-        Next
-
-        xls.EnableEvents = False
-        xls.ScreenUpdating = False
-        Dim u_sheet = xls.ActiveWorkbook.Sheets.Add(After:=xls.ActiveWorkbook.Worksheets(ct))
-        u_sheet.Name = "【settings】"
-        u_sheet.Visible = 0
-
-        Wb.Sheets("【settings】").Cells(1, 1).Value = Replace("MAX,MIN,SIN,COS,TAN,TREND,ABS", ",", vbLf)
-
-        For i = 0 To 7
-            Wb.Sheets("【settings】").Cells(1, i + 2).Value = superscripts(i)
-        Next
-
-        xls.ScreenUpdating = True
-        xls.EnableEvents = True
-    End Sub
 
 End Class

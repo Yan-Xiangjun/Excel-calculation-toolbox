@@ -16,12 +16,12 @@ Imports System.Windows.Forms
 Public Class excel_functions
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        xls.ActiveWorkbook.Sheets("【settings】").Cells(1, 1).Value = Replace(tb1.Text, vbCrLf, vbLf)
+        My.Computer.FileSystem.WriteAllText(py_location & "config.txt", tb1.Text, False)
         Close()
     End Sub
 
     Private Sub excel_functions_Load(sender As Object, e As EventArgs) Handles Me.Load
-        tb1.Text = Replace(xls.ActiveWorkbook.Sheets("【settings】").Cells(1, 1).Text, vbLf, vbCrLf)
+        tb1.Text = My.Computer.FileSystem.ReadAllText(py_location & "config.txt")
     End Sub
 
 
