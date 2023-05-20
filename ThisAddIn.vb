@@ -20,10 +20,7 @@ Public Class ThisAddIn
         Globals.Ribbons.Ribbon1.DropDown1.SelectedItemIndex = 2
         superscripts = {"²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"}
         py_location = Environment.GetEnvironmentVariable("Excel_calculation_toolbox", 2)
-        Dim wb = xls.Workbooks.Add()
-        xls.AddIns.Add(py_location & "my_function.xlam")
-        xls.AddIns("My_Function").Installed = True
-        wb.Close(False)
+        my_function_xlam = xls.Workbooks.Open(py_location & "my_function.xlam")
 
     End Sub
 
@@ -57,7 +54,6 @@ Public Class ThisAddIn
                     End If
 
                     Dim ar = Target.Address(RowAbsolute:=False, ColumnAbsolute:=False)
-
 
                     '显示公式
                     Dim cell_left = Target.Offset(0, -1)
@@ -111,7 +107,6 @@ Public Class ThisAddIn
         xls.EnableEvents = True
     End Sub
 
-
     Function unit_cal(c As Range)
         Dim var_f = c.Formula
         If var_f = "" Or Left(var_f, 1) <> "=" Then
@@ -122,7 +117,6 @@ Public Class ThisAddIn
             var_f = Mid(var_f, 8)
             var_f = "=" & Left(var_f, InStrRev(var_f, ",") - 1)
         End If
-
 
         Dim re = CreateObject("vbscript.regexp")
         re.Global = True
@@ -174,12 +168,10 @@ Public Class ThisAddIn
         py_process.Start()
         unit_cal = Replace(py_process.StandardOutput.ReadToEnd(), vbCrLf, "")
 
-
         For i = 2 To 9
             unit_cal = Replace(unit_cal, "^" & CStr(i), superscripts(i - 2))
         Next
         If unit_cal = "1" Then unit_cal = "~"
     End Function
-
 
 End Class
