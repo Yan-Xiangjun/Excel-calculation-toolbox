@@ -1,0 +1,139 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Excel计算书工具箱1.0
+</name>
+</assembly>
+<members>
+<member name="T:Excel计算书工具箱1._0.My.Resources.Resources">
+<summary>
+  一个强类型的资源类，用于查找本地化的字符串等。
+</summary>
+</member>
+<member name="P:Excel计算书工具箱1._0.My.Resources.Resources.ResourceManager">
+<summary>
+  返回此类使用的缓存的 ResourceManager 实例。
+</summary>
+</member>
+<member name="P:Excel计算书工具箱1._0.My.Resources.Resources.Culture">
+<summary>
+  重写当前线程的 CurrentUICulture 属性，对
+  使用此强类型资源类的所有资源查找执行重写。
+</summary>
+</member>
+<member name="P:Excel计算书工具箱1._0.My.Resources.Resources.传出3_efferent_three">
+<summary>
+  查找 System.Drawing.Bitmap 类型的本地化资源。
+</summary>
+</member>
+<member name="P:Excel计算书工具箱1._0.My.Resources.Resources.切换按钮_switch_button">
+<summary>
+  查找 System.Drawing.Bitmap 类型的本地化资源。
+</summary>
+</member>
+<member name="P:Excel计算书工具箱1._0.My.Resources.Resources.切换按钮_switch_button_黑白">
+<summary>
+  查找 System.Drawing.Bitmap 类型的本地化资源。
+</summary>
+</member>
+<member name="P:Excel计算书工具箱1._0.My.Resources.Resources.刷新_refresh">
+<summary>
+  查找 System.Drawing.Bitmap 类型的本地化资源。
+</summary>
+</member>
+<member name="P:Excel计算书工具箱1._0.My.Resources.Resources.加载_loading">
+<summary>
+  查找 System.Drawing.Bitmap 类型的本地化资源。
+</summary>
+</member>
+<member name="P:Excel计算书工具箱1._0.My.Resources.Resources.搜索_search">
+<summary>
+  查找 System.Drawing.Bitmap 类型的本地化资源。
+</summary>
+</member>
+<member name="P:Excel计算书工具箱1._0.My.Resources.Resources.数据库网络节点_database_network_point">
+<summary>
+  查找 System.Drawing.Bitmap 类型的本地化资源。
+</summary>
+</member>
+<member name="P:Excel计算书工具箱1._0.My.Resources.Resources.数据显示_data_display">
+<summary>
+  查找 System.Drawing.Bitmap 类型的本地化资源。
+</summary>
+</member>
+<member name="P:Excel计算书工具箱1._0.My.Resources.Resources.数据显示_data_display_黑白">
+<summary>
+  查找 System.Drawing.Bitmap 类型的本地化资源。
+</summary>
+</member>
+<member name="P:Excel计算书工具箱1._0.My.Resources.Resources.自动列宽_auto_line_width">
+<summary>
+  查找 System.Drawing.Bitmap 类型的本地化资源。
+</summary>
+</member>
+<member name="T:Excel计算书工具箱1._0.ThisRibbonCollection">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisRibbonCollection.#ctor(Microsoft.Office.Tools.Ribbon.RibbonFactory)">
+
+</member>
+<member name="T:Excel计算书工具箱1._0.ThisAddIn">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisAddIn.#ctor(Microsoft.Office.Tools.Excel.ApplicationFactory,System.IServiceProvider)">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisAddIn.Initialize">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisAddIn.FinishInitialization">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisAddIn.InitializeDataBindings">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisAddIn.InitializeCachedData">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisAddIn.InitializeData">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisAddIn.BindToData">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisAddIn.StartCaching(System.String)">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisAddIn.StopCaching(System.String)">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisAddIn.IsCached(System.String)">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisAddIn.BeginInitialization">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisAddIn.EndInitialization">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisAddIn.InitializeControls">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisAddIn.InitializeComponents">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisAddIn.NeedsFill(System.String)">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.ThisAddIn.OnShutdown">
+
+</member>
+<member name="T:Excel计算书工具箱1._0.Globals">
+
+</member>
+<member name="M:Excel计算书工具箱1._0.Globals.#ctor">
+
+</member>
+</members>
+</doc>
