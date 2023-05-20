@@ -1,0 +1,7 @@
+﻿MAX
+MIN
+SIN
+COS
+TAN
+TREND
+ABS
