@@ -2,6 +2,7 @@
 
 #### 介绍
 用于帮助用户撰写工程结构计算书的ExcelVSTO插件
+![软件截图](/screenshot.png)
 
 #### 软件架构
 使用VB.NET编写VSTO主程序  
